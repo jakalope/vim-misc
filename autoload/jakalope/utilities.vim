@@ -15,8 +15,6 @@ function! jakalope#utilities#vsplits(col)
 endfunction
 
 " Locks your working directory to `dir`.
-" I find this useful because a lot of my file-opener tricks rely on vim being
-" in the root of my workspace and it turns out a lot of plugins disrupt that.
 function! jakalope#utilities#lock_cwd(dir) 
     augroup lock_cwd  " make this function replaceable upon sourcing
         " remove previous definition
