@@ -5,14 +5,18 @@ let s:loaded = 1
 
 " Generates maximum number of vertical splits with at least `col` columns each.
 function! jakalope#utilities#vsplits(col)
-    silent only!                      " close all splits but this one
-    let l:splits =  &columns / a:col  " determine the number of splits to create
-                                      " create the splits
-    exe l:splits . 'vsplit'
-    wincmd =                          " set all splits to equal width
+    silent only!                         " close all splits but this one
+    let l:splits =  &columns / a:col - 1 " the number of splits to create
+    while l:splits > 0                   " create the splits
+        vsplit
+        let l:splits -= 1
+    endwhile
+    wincmd =                             " set all splits to equal width
 endfunction
 
 " Locks your working directory to `dir`.
+" I find this useful because a lot of my file-opener tricks rely on vim being
+" in the root of my workspace and it turns out a lot of plugins disrupt that.
 function! jakalope#utilities#lock_cwd(dir) 
     augroup lock_cwd  " make this function replaceable upon sourcing
         " remove previous definition
