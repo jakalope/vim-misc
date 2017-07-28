@@ -95,9 +95,11 @@ function! jakalope#utilities#source()
     unlet! g:loaded_smartword
     unlet! g:command_t_loaded
     unlet! g:loaded_abolish
+    unlet! g:loaded_commentary
     ReloadScript ~/.vim/bundle/vim-smartword/plugin/smartword.vim
     ReloadScript ~/.vim/bundle/command-t/plugin/command-t.vim
     ReloadScript ~/.vim/bundle/vim-abolish/plugin/abolish.vim
+    ReloadScript ~/.vim/bundle/vim-commentary/plugin/commentary.vim
 
     " Re-detect filetypes.
     Detect
