@@ -7,7 +7,13 @@ let s:loaded = 1
 " number of splits correctly upon startup, we need to set an autocmd on the
 " VimEnter event, which happens after the number of columns are known.
 if exists('g:util_min_split_cols')
-    autocmd VimEnter * call jakalope#utilities#vsplits(g:util_min_split_cols)
+    if exists('g:util_split_with_terminal') && g:util_split_with_terminal==1
+        autocmd VimEnter * call 
+            \ jakalope#utilities#vsplits_with_terminal(g:util_min_split_cols)
+    else
+        autocmd VimEnter * call 
+            \ jakalope#utilities#vsplits(g:util_min_split_cols)
+    endif
 endif
 
 " I find this useful because a lot of my file-opener tricks rely on vim being

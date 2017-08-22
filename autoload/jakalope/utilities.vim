@@ -28,6 +28,19 @@ function! jakalope#utilities#format(formatter)
     call winrestview(view)
 endfunction
 
+function! jakalope#utilities#terminal()
+    if has('nvim')
+        " Support for Neovim
+        terminal
+        return 1
+    elseif has('terminal')
+        " Support for Vim8
+        terminal ++curwin
+        return 1
+    endif
+    return 0
+endfunction
+
 " Generates maximum number of vertical splits with at least `col` columns each.
 function! jakalope#utilities#vsplits(col)
     silent only!                         " close all splits but this one
@@ -39,17 +52,24 @@ function! jakalope#utilities#vsplits(col)
     wincmd =                             " set all splits to equal width
 endfunction
 
+function! jakalope#utilities#vsplits_with_terminal(col)
+    call jakalope#utilities#vsplits(a:col)
+    call jakalope#utilities#terminal()
+endfunction
+
 " Locks your working directory to `dir`.
 function! jakalope#utilities#lock_cwd(dir) 
-    augroup lock_cwd  " make this function replaceable upon sourcing
-        " remove previous definition
-        autocmd!
-        if !empty(a:dir)   " only generate the autocmd if we have a real input
-            " change directories to `dir`, then lock us into that directory
-            exec 'cd '.a:dir
-            exec 'autocmd DirChanged * cd '.a:dir
-        endif
-    augroup end
+    if has('nvim')
+        augroup lock_cwd  " make this function replaceable upon sourcing
+            " remove previous definition
+            autocmd!
+            if !empty(a:dir)   " only generate the autocmd if we have a real input
+                " change directories to `dir`, then lock us into that directory
+                exec 'cd '.a:dir
+                exec 'autocmd DirChanged * cd '.a:dir
+            endif
+        augroup end
+    endif
 endfunction
 
 " Find a companion file, if it exists (e.g. test.h -> test.cpp)
@@ -124,7 +144,11 @@ endfunction
 "
 
 function! s:IsATerm()
-    if bufname("%")=~#"term://.*"
+    if has('nvim') && bufname("%")=~#"term://.*"
+        " Support for Neovim
+        return 1
+    elseif has('terminal') && bufname("%")=~&shell
+        " Support for Vim8
         return 1
     endif
     return 0
