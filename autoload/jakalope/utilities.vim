@@ -45,16 +45,19 @@ endfunction
 function! jakalope#utilities#vsplits(col)
     silent only!                         " close all splits but this one
     let l:splits =  &columns / a:col - 1 " the number of splits to create
-    while l:splits > 0                   " create the splits
+    let l:i = l:splits
+    while l:i > 0                        " create the splits
         vsplit
-        let l:splits -= 1
+        let l:i -= 1
     endwhile
     wincmd =                             " set all splits to equal width
+    return l:splits
 endfunction
 
 function! jakalope#utilities#vsplits_with_terminal(col)
-    call jakalope#utilities#vsplits(a:col)
-    call jakalope#utilities#terminal()
+    if jakalope#utilities#vsplits(a:col) > 0
+        call jakalope#utilities#terminal()
+    endif
 endfunction
 
 " Locks your working directory to `dir`.
