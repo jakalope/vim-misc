@@ -103,31 +103,6 @@ function! jakalope#utilities#companion()
     return expand("%")
 endfunction
 
-" Source vimrc, clear and reload scripts, clear and reset options.
-command! Src call jakalope#utilities#source()
-function! jakalope#utilities#source()
-    " Reset all options and mappings.
-    set all&
-    mapclear | mapclear <buffer> | mapclear! | mapclear! <buffer>
-
-    " Source vimrc
-    source ~/.vimrc
-
-    " Reload scripts that were unmapped at the top of this file.
-    unlet! g:vim_utilities_loaded
-    unlet! g:loaded_smartword
-    unlet! g:command_t_loaded
-    unlet! g:loaded_abolish
-    unlet! g:loaded_commentary
-    ReloadScript ~/.vim/bundle/vim-smartword/plugin/smartword.vim
-    ReloadScript ~/.vim/bundle/command-t/plugin/command-t.vim
-    ReloadScript ~/.vim/bundle/vim-abolish/plugin/abolish.vim
-    ReloadScript ~/.vim/bundle/vim-commentary/plugin/commentary.vim
-
-    " Re-detect filetypes.
-    Detect
-endfunction
-
 function! jakalope#utilities#sequence(prefix, list)
     let l:out = []
     for item in a:list
